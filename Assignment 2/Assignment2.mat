@@ -1,0 +1,48 @@
+Fs=48000;
+T=1;
+t=0:1/(Fs):1;
+
+frequencies=[100,200,300,400,500,600,700,800,900,1000];
+
+signal=zeros(size(t));
+
+for i=1:length(frequencies)
+    signal=signal+sin(2*pi*frequencies(i)*t);
+end
+Y=fft(signal);
+f=0:Fs;
+
+figure;
+subplot(4,1,1);  
+plot(t, signal);
+xlabel('Time (seconds)');
+ylabel('Amplitude');
+title('Time-domain Signal');
+grid on;
+
+subplot(4,1,2);
+plot(f(1:Fs/2), abs(Y(1:Fs/2)));  
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+title('Magnitude of FFT of the Signal');
+grid on;
+
+
+
+Hd=lowpass();
+filtered_signal=filter(Hd,signal);
+
+subplot(4,1,3);
+plot(t,filtered_signal);
+xlabel('Frequency (Hz)')
+ylabel('Amplitude');
+title('Time-domain Filtered Signal');
+grid on;
+
+Y_filter=fft(filtered_signal);
+subplot(4,1,4);
+plot(f(1:Fs/2),abs(Y_filter(1:Fs/2)));
+xlabel('Frequency (Hz)');
+ylabel('Magnitude');
+title('Magnitude of FFT of the Filtered Signal');
+grid on;
